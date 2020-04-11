@@ -1,24 +1,26 @@
-package sample;
+package sample.Gallery;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import sample.utils.FileManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class AppControler {
+class GalleryController {
 
     private Gallery gallery;
     private FileManager fileManager = new FileManager();
     private List<Image> images = new ArrayList<>();
 
-    AppControler(Gallery gallery) {
+    GalleryController(Gallery gallery) {
         this.gallery = gallery;
     }
 
     void loadImagesFromDirectory() {
         images = fileManager.loadImagesFromDirectory();
-        if(images != null) {
+        if (images != null) {
+            gallery.clearHBox();
             gallery.setImageView(images.get(0));
             gallery.setHBox(images);
         }
@@ -26,7 +28,8 @@ class AppControler {
 
     void loadImages() {
         images = fileManager.loadImages();
-        if(images != null) {
+        if (images != null) {
+            gallery.clearHBox();
             gallery.setImageView(images.get(0));
             gallery.setHBox(images);
         }

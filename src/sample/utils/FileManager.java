@@ -1,4 +1,4 @@
-package sample;
+package sample.utils;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
@@ -13,9 +13,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-class FileManager {
+public class FileManager {
 
-    List<Image> loadImagesFromDirectory() {
+    public List<Image> loadImagesFromDirectory() {
         List<Image> images = new ArrayList<>();
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Choose Directory");
@@ -39,7 +39,7 @@ class FileManager {
         return images;
     }
 
-    List<Image> loadImages() {
+    public List<Image> loadImages() {
         List<Image> images = new ArrayList<>();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Images");
@@ -62,20 +62,16 @@ class FileManager {
         return images;
     }
 
-    boolean saveImage(BufferedImage image) {
+    public boolean saveImage(BufferedImage image) {
         FileChooser fileChooser = new FileChooser();
 
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("image (*.jpg)", "*.jpg", "*.png");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("image (*.png)", "*.jpg", "*.png");
         fileChooser.getExtensionFilters().add(extFilter);
 
         File file = fileChooser.showSaveDialog(null);
-
         if (file != null) {
             try {
-                PrintWriter writer;
-                writer = new PrintWriter(file);
-                writer.println(image);
-                writer.close();
+                ImageIO.write(image, "png", file);
             } catch (IOException ex) {
                 return false;
             }

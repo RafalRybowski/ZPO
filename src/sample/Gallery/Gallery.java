@@ -1,4 +1,4 @@
-package sample;
+package sample.Gallery;
 
 import javafx.scene.image.Image;
 
