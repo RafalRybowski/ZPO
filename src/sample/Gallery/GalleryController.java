@@ -1,7 +1,10 @@
 package sample.Gallery;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import sample.utils.FileManager;
 
 import java.util.ArrayList;
@@ -35,15 +38,39 @@ class GalleryController {
         }
     }
 
-    void saveImage(Image image) {
-        if (image == null) {
-            gallery.showInformationAlert("Failed Saved", "Failed saved image because you didn't load any");
-            return;
-        }
-        if (fileManager.saveImage(SwingFXUtils.fromFXImage(image, null))) {
-            gallery.showInformationAlert("Failed Saved", "File successful saved");
-        } else {
-            gallery.showInformationAlert("Failed Saved", "Couldn't saved file");
-        }
+
+
+    void shift(ImageView imageView, Point2D delta) {
+        Rectangle2D viewport = imageView.getViewport();
+
+        double width = imageView.getImage().getWidth() ;
+        double height = imageView.getImage().getHeight() ;
+
+        double maxX = width - viewport.getWidth();
+        double maxY = height - viewport.getHeight();
+
+        double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
+        double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
+
+        imageView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
+    }
+
+    double clamp(double value, double min, double max) {
+
+        if (value < min)
+            return min;
+        if (value > max)
+            return max;
+        return value;
+    }
+
+    Point2D imageViewToImage(ImageView imageView, Point2D imageViewCoordinates) {
+        double xProportion = imageViewCoordinates.getX() / imageView.getBoundsInLocal().getWidth();
+        double yProportion = imageViewCoordinates.getY() / imageView.getBoundsInLocal().getHeight();
+
+        Rectangle2D viewport = imageView.getViewport();
+        return new Point2D(
+                viewport.getMinX() + xProportion * viewport.getWidth(),
+                viewport.getMinY() + yProportion * viewport.getHeight());
     }
 }

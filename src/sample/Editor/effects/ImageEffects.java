@@ -27,4 +27,6 @@ public class ImageEffects {
         return wImage;
     }
 
+
+
 }

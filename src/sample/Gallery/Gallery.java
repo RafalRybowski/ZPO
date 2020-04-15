@@ -1,6 +1,7 @@
 package sample.Gallery;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.List;
 
