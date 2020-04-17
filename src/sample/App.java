@@ -3,6 +3,7 @@ package sample;
 import javafx.application.Application;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import sample.Editor.EditorView;
 import sample.Gallery.GalleryView;
@@ -27,8 +28,12 @@ public class App extends Application {
         editor = editorView.create();
 
         galleryView.changeScene((image) -> {
-            editorView.setImage(image);
-            window.setScene(editor);
+            if(image != null) {
+                editorView.setImage(image);
+                window.setScene(editor);
+            } else {
+                showInformationAlert("Image is Empty", "You can't edit image witch one doesn't exist");
+            }
         });
 
         editorView.changeScene(() -> {
@@ -41,6 +46,13 @@ public class App extends Application {
         window.show();
     }
 
+    public void showInformationAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+
+        alert.showAndWait();
+    }
 
     public static void main(String[] args) {
         launch(args);

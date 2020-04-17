@@ -2,7 +2,9 @@ package sample.Editor;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.SepiaTone;
@@ -13,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import sample.Editor.effects.CropSellect;
 import sample.View;
 
 public class EditorView extends View implements Editor {
@@ -20,6 +23,7 @@ public class EditorView extends View implements Editor {
     private ImageView imageView;
     private EditorClickListener changeScene;
     private EditorController presenter;
+    private Group imageLayer = new Group();
     private static SepiaTone sepiaEffect = new SepiaTone(0);
 
 
@@ -29,16 +33,19 @@ public class EditorView extends View implements Editor {
 
     @Override
     public Scene create() {
-        presenter = new EditorController(this);
+        presenter = new EditorController(this, new CropSellect(imageLayer));
 
         imageView = new ImageView();
+
+        imageLayer.getChildren().add(imageView);
         imageView.setEffect(sepiaEffect);
 
-        VBox vBox = createOptionsMenu();
+        presenter = new EditorController(this, new CropSellect(imageLayer));
 
+        VBox vBox = createOptionsMenu();
         BorderPane borderPane = new BorderPane();
         borderPane.setLeft(vBox);
-        borderPane.setCenter(imageView);
+        borderPane.setCenter(imageLayer);
         return new Scene(borderPane, 1024, 768);
     }
 
@@ -50,6 +57,14 @@ public class EditorView extends View implements Editor {
         vBox.setAlignment(Pos.CENTER);
         vBox.setPadding(padding);
         vBox.maxWidth(window.getHeight() / 4);
+
+        Button cropButton = new Button("Crop");
+        cropButton.setOnAction( e -> {
+            Image image = imageView.getImage();
+            double scaleX = image.getHeight() / imageView.getFitHeight();
+            double scaleY = image.getWidth() / imageView.getFitWidth();
+            presenter.onCropPressed(image, scaleY, scaleX);
+        });
 
         Button negativeButton = new Button("Negative");
         negativeButton.setOnAction(e -> {
@@ -65,17 +80,32 @@ public class EditorView extends View implements Editor {
 
         HBox cancelAndSave = createCancelSave();
 
-        vBox.getChildren().addAll(negativeButton,textSepia, sepiaSlider, cancelAndSave);
+        vBox.getChildren().addAll(cropButton, negativeButton, textSepia, sepiaSlider, cancelAndSave);
         return vBox;
     }
 
     private HBox createCancelSave(){
         Button cancel = new Button("Cancel");
-        cancel.setOnAction( e -> changeScene.onClick());
-        Button apply = new Button("Apply");
+        cancel.setOnAction( e -> changeScene());
+        Button save = new Button("Save");
+        save.setOnAction( e -> presenter.saveImage(imageView.getImage()));
         HBox hBox = new HBox();
-        hBox.getChildren().addAll(cancel, apply);
+        hBox.getChildren().addAll(cancel, save);
         return hBox;
+    }
+
+    @Override
+    public void showInformationAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+
+        alert.showAndWait();
+    }
+
+    @Override
+    public void changeScene(){
+        changeScene.onClick();
     }
 
     @Override
