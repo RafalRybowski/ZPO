@@ -13,7 +13,6 @@ public class App extends Application {
 
     private Stage window;
     private Scene gallery, editor;
-    private GalleryView galleryView;
     private EditorView editorView;
 
 
@@ -21,7 +20,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
-        galleryView = new GalleryView(window);
+        GalleryView galleryView = new GalleryView(window);
         gallery = galleryView.create();
 
         editorView = new EditorView(window);
@@ -32,7 +31,7 @@ public class App extends Application {
                 editorView.setImage(image);
                 window.setScene(editor);
             } else {
-                showInformationAlert("Image is Empty", "You can't edit image witch one doesn't exist");
+                showInformationAlert();
             }
         });
 
@@ -46,10 +45,10 @@ public class App extends Application {
         window.show();
     }
 
-    public void showInformationAlert(String header, String content) {
+    private void showInformationAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
+        alert.setHeaderText("Image is Empty");
+        alert.setContentText("You can't edit image witch one doesn't exist");
 
         alert.showAndWait();
     }

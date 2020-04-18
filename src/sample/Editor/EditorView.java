@@ -66,6 +66,12 @@ public class EditorView extends View implements Editor {
             presenter.onCropPressed(image, scaleY, scaleX);
         });
 
+        Button sharpeningButton = new Button("Sharpening ");
+        cropButton.setOnAction( e -> {
+            Image image = imageView.getImage();
+            presenter.onSharpeningPressed(image);
+        });
+
         Button negativeButton = new Button("Negative");
         negativeButton.setOnAction(e -> {
             presenter.onNegativeButtonPressed(imageView.getImage());
@@ -80,7 +86,7 @@ public class EditorView extends View implements Editor {
 
         HBox cancelAndSave = createCancelSave();
 
-        vBox.getChildren().addAll(cropButton, negativeButton, textSepia, sepiaSlider, cancelAndSave);
+        vBox.getChildren().addAll(cropButton, sharpeningButton, negativeButton, textSepia, sepiaSlider, cancelAndSave);
         return vBox;
     }
 

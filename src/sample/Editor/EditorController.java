@@ -37,16 +37,15 @@ class EditorController {
 
     void onCropPressed(Image image, double scaleY, double scaleX) {
         this.cropSellect.setOnCropped(bounds -> {
-            double scale =  0;
-            if (scaleY > scaleX) {
-                scale = scaleY;
-            } else {
-                scale = scaleX;
-            }
+            double scale = Math.max(scaleY, scaleX);
             Image newImage = cropImage(bounds, image, scale);
             view.setImage(newImage);
         });
         cropSellect.startSelection();
+    }
+
+    void onSharpeningPressed(Image image) {
+        view.setImage(ImageEffects.sharpeningImage(image));
     }
 
     private Image cropImage(Bounds bounds, Image image, double scale) {
