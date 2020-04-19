@@ -141,7 +141,7 @@ public class GalleryView extends View implements Gallery {
         for (Image image : images) {
             ImageView imageView = new ImageView();
             imageView.setOnMouseClicked(event ->
-                    mainImageView.setImage(imageView.getImage())
+                    setImageView(imageView.getImage())
             );
             imageView.setImage(image);
             imageView.setFitWidth(window.getWidth() / 4);

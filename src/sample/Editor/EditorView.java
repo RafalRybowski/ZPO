@@ -67,7 +67,7 @@ public class EditorView extends View implements Editor {
         });
 
         Button sharpeningButton = new Button("Sharpening ");
-        cropButton.setOnAction( e -> {
+        sharpeningButton.setOnAction( e -> {
             Image image = imageView.getImage();
             presenter.onSharpeningPressed(image);
         });

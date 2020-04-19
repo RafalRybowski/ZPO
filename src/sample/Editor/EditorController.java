@@ -28,7 +28,7 @@ class EditorController {
 
     void saveImage(Image image) {
         if (fileManager.saveImage(SwingFXUtils.fromFXImage(image, null))) {
-            view.showInformationAlert("Failed Saved", "File successful saved");
+            view.showInformationAlert("Successful Saved", "File successful saved");
         } else {
             view.showInformationAlert("Failed Saved", "Couldn't saved file");
         }
